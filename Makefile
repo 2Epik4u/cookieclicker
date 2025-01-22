@@ -12,7 +12,6 @@ ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 # ===========
 
 NAME		:= cookieclicker
-
 GAME_TITLE	:= Cookie Clicker DS
 GAME_SUBTITLE	:= Built with BlocksDS
 GAME_AUTHOR	:= github.com/blocksds/sdk
@@ -36,7 +35,7 @@ INCLUDEDIRS	:= includes build
 #BINDIRS		:= data
 #AUDIODIRS	:= audio
 # List of folders to combine into the root of NitroFS:
-#NITROFSDIR	:= nitrofs
+NITROFSDIR	:= nitrofs
 
 # Defines passed to all files
 # ---------------------------

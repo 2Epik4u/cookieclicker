@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 
+#include <nf_lib.h>
+
 static volatile int frame = 0;
 int cookies = 0;
 
@@ -31,9 +33,10 @@ int main(void) {
 
 	consoleDemoInit();
 
-	printf("      Hello DS dev'rs\n");
-	printf("     \x1b[32mwww.devkitpro.org\n");
-	printf("   \x1b[32;1mwww.drunkencoders.com\x1b[39m");
+
+//	printf("      Hello DS dev'rs\n");
+//	printf("     \x1b[32mwww.devkitpro.org\n");
+//	printf("   \x1b[32;1mwww.drunkencoders.com\x1b[39m");
 
 	while(1) {
 
@@ -43,6 +46,8 @@ int main(void) {
 		if (keys & KEY_START) break;
 		if (keys & KEY_TOUCH) {
 			cookies = cookies + 1;
+			NF_InitRawSoundBuffers();
+			NF_LoadRawSound("yum", 0, 11025, 0);
 		}
 
 
@@ -51,8 +56,8 @@ int main(void) {
 		// print at using ansi escape sequence \x1b[line;columnH
 		printf("\x1b[10;0HCookies Clicked = %d",cookies);
 
-		printf("\x1b[16;0HTouch x = %04X, %04X\n", touchXY.rawx, touchXY.px);
-		printf("Touch y = %04X, %04X\n", touchXY.rawy, touchXY.py);
+	//	printf("\x1b[16;0HTouch x = %04X, %04X\n", touchXY.rawx, touchXY.px);
+	//	printf("Touch y = %04X, %04X\n", touchXY.rawy, touchXY.py);
 
 	}
 
