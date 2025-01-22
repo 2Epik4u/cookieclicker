@@ -6,5 +6,4 @@ very very very basic cookie clicker
 tap the screen
 
 # how to make the game
-download devkitarm
-run make
+https://blocksds.skylyrac.net/docs/setup/options/
