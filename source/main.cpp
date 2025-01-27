@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 #include <nf_lib.h>
+#include <filesystem.h>
 
 static volatile int frame = 0;
 int cookies = 0;
@@ -27,6 +28,12 @@ static void Vblank() {
 //---------------------------------------------------------------------------------
 int main(void) {
 //---------------------------------------------------------------------------------
+	NF_InitRawSoundBuffers();
+	soundEnable();
+	nitroFSInit(NULL);
+    NF_SetRootFolder("NITROFS");
+	NF_LoadRawSound("yum", 0, 22050, 0);
+
 	touchPosition touchXY;
 
 	irqSet(IRQ_VBLANK, Vblank);
@@ -46,8 +53,7 @@ int main(void) {
 		if (keys & KEY_START) break;
 		if (keys & KEY_TOUCH) {
 			cookies = cookies + 1;
-			NF_InitRawSoundBuffers();
-			NF_LoadRawSound("yum", 0, 11025, 0);
+			NF_PlayRawSound(0, 127, 64, false, 0);
 		}
 
 
