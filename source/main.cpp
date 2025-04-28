@@ -1,66 +1,64 @@
-/*---------------------------------------------------------------------------------
 
-	$Id: main.cpp,v 1.13 2008-12-02 20:21:20 dovoto Exp $
-
-	Simple console print demo
-	-- dovoto
-
-
----------------------------------------------------------------------------------*/
 #include <nds.h>
-
 #include <stdio.h>
-
 #include <nf_lib.h>
 #include <filesystem.h>
 
-static volatile int frame = 0;
+
 int cookies = 0;
 
-//---------------------------------------------------------------------------------
-// VBlank interrupt handler. This function is executed in IRQ mode - be careful!
-//---------------------------------------------------------------------------------
-static void Vblank() {
-//---------------------------------------------------------------------------------
-	frame++;
-}
-
-//---------------------------------------------------------------------------------
 int main(void) {
-//---------------------------------------------------------------------------------
+	NF_Set2D(0, 0);
+    NF_Set2D(1, 0);
+	consoleDemoInit();
 	NF_InitRawSoundBuffers();
 	soundEnable();
 	nitroFSInit(NULL);
     NF_SetRootFolder("NITROFS");
+	NF_Set2D(0, 0);
+    NF_Set2D(1, 0);
+    // Initialize tiled backgrounds system
+    NF_InitTiledBgBuffers();    // Initialize storage buffers
+    NF_InitTiledBgSys(0);       // Top screen
+    NF_InitTiledBgSys(1);       // Bottom screen
+
 	NF_LoadRawSound("yum", 0, 22050, 0);
+	NF_LoadTiledBg("cookie_flat", "cookie", 256, 256);
+	NF_CreateTiledBg(1, 3, "cookie");
+	// load text
+	NF_InitTextSys(0);          // Top screen
+	NF_LoadTextFont16("font16", "normal", 256, 256, 0);   // Load rotated text
+	NF_CreateTextLayer16(0, 0, 0, "normal");
+	char buffer[64];  // <-- Make space for the final text
+
+
+	
 
 	touchPosition touchXY;
 
-	irqSet(IRQ_VBLANK, Vblank);
 
-	consoleDemoInit();
-
-
-//	printf("      Hello DS dev'rs\n");
-//	printf("     \x1b[32mwww.devkitpro.org\n");
-//	printf("   \x1b[32;1mwww.drunkencoders.com\x1b[39m");
+	
 
 	while(1) {
-
-		swiWaitForVBlank();
 		scanKeys();
 		int keys = keysDown();
 		if (keys & KEY_START) break;
 		if (keys & KEY_TOUCH) {
-			cookies = cookies + 1;
+			cookies++;
 			NF_PlayRawSound(0, 127, 64, false, 0);
 		}
+		printf("\x1b[0;0HCookies Clicked = %d",cookies);
+		NF_UpdateTextLayers();
+		sprintf(buffer, "Cookies clicked = %d", cookies);
+		NF_WriteText16(0, 0, 1, 1, buffer);
+		
+
 
 
 		touchRead(&touchXY);
 
 		// print at using ansi escape sequence \x1b[line;columnH
-		printf("\x1b[10;0HCookies Clicked = %d",cookies);
+
 
 	//	printf("\x1b[16;0HTouch x = %04X, %04X\n", touchXY.rawx, touchXY.px);
 	//	printf("Touch y = %04X, %04X\n", touchXY.rawy, touchXY.py);
